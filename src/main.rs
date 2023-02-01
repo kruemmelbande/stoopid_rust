@@ -30,6 +30,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         if line.is_empty(){
             continue;
         }
+        let split_lines: Vec<&str> = line.split(":").collect();
+        if split_lines[0]=="prints" || split_lines[0]=="printsc"{
+            continue;
+        }
         //if there is a space in the line, then exit, because i just dont like it.
         for c in line.chars(){
             //print!("{}", c);
@@ -42,7 +46,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 return Ok(());
             }
         }
-        let split_lines: Vec<&str> = line.split(":").collect();
+        
         if split_lines[0] == "label"{
             label_dict.insert(split_lines[1].to_string(), i as i32);
         }
