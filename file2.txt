@@ -1,0 +1,6 @@
+print:69
+var:uwu:1
+label:imalabel
+print:uwu
+add:uwu:1
+goif:uwu:<:10:imalabel
