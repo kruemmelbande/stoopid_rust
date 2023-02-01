@@ -1,4 +1,12 @@
-var:uwu:1
-print:uwu
-add:uwu:1
-goif:uwu:<:10:1
+var:owo:0
+label:start
+	add:owo:1
+		var:uwu:1
+		label:printthem
+		printc:uwu
+		add:uwu:1
+		go:printthem:if:uwu:<:10
+	printsc:  :
+	print:owo
+	go:start:if:owo:<:10
+

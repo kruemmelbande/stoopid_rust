@@ -26,8 +26,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     while i<linecount
     {
         i+=1;
-        let line = lines.get(i-1).unwrap().as_ref().unwrap();
+        let line = lines.get(i-1).unwrap().as_ref().unwrap().trim();
         if line.is_empty(){
+            continue;
+        }
+        let split_lines: Vec<&str> = line.split(":").collect();
+        if split_lines[0]=="prints" || split_lines[0]=="printsc"{
             continue;
         }
         //if there is a space in the line, then exit, because i just dont like it.
@@ -42,7 +46,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 return Ok(());
             }
         }
-        let split_lines: Vec<&str> = line.split(":").collect();
+        
         if split_lines[0] == "label"{
             label_dict.insert(split_lines[1].to_string(), i as i32);
         }
@@ -51,7 +55,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     while i<linecount
     {
         i+=1;
-        let line = lines.get(i-1).unwrap().as_ref().unwrap();
+        let line = lines.get(i-1).unwrap().as_ref().unwrap().trim();
         if line.is_empty(){
             continue;
         }   
@@ -61,6 +65,15 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         if split_lines[0] == "print"{
             println!("{}", get_value(split_lines[1].to_string(), dict.clone()));
+        }
+        if split_lines[0] == "printc"{
+            print!("{}", get_value(split_lines[1].to_string(), dict.clone()));
+        }
+        if split_lines[0] == "prints"{
+            println!("{}", split_lines[1].to_string())
+        }
+        if split_lines[0] == "printsc"{
+            print!("{}", split_lines[1].to_string())
         }
         if split_lines[0] == "add"{
             let a = get_value(split_lines[1].to_string(), dict.clone());
@@ -109,6 +122,20 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
             //write sum into a
             dict.insert(split_lines[1].to_string(), sum);
+        }
+        if split_lines[0] == "go"{
+            //go:69
+            //go:69:if:a:<:b
+            
+            if split_lines.len()>2{
+                if compare(split_lines[3].to_string()+":"+&split_lines[4].to_string()+":"+&split_lines[5].to_string(), dict.clone()){
+                    i = get_value(split_lines[1].to_string(), label_dict.clone()) as usize;
+                }
+            }
+            else{
+                i = get_value(split_lines[1].to_string(), label_dict.clone()) as usize;
+            }
+
         }
         if split_lines[0] == "goto"{
             i = get_value(split_lines[1].to_string(), label_dict.clone()) as usize;
