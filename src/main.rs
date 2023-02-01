@@ -3,7 +3,7 @@ use std::fs;
 use std::error::Error;
 use std::io::BufReader;
 use std::io::BufRead;
-
+use std::process::exit;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut dict: HashMap<String,i32> = HashMap::new();
@@ -15,12 +15,22 @@ fn main() -> Result<(), Box<dyn Error>> {
     if args.len() > 1{
         filepath = &args[1];
     }
+    //check if file exists
+    if !std::path::Path::new(filepath).exists(){
+        println!("Error: File does not exist");
+        exit(1);
+    }
+
     let file = fs::File::open(filepath)?;
     let reader = BufReader::new(file);
     //to string array
     let mut i : usize = 0;
     //for line in reader.lines() 
     let lines: Vec<_> = reader.lines().collect();
+    if lines.len() == 0{
+        println!("Error: File is empty");
+        exit(1);
+    }
     let linecount = lines.len();
     //get labels
     while i<linecount
@@ -43,7 +53,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if c == ' '{
                 println!("Error: There is a space in the line {}.", i);
                 println!("Thats pretty cringe ngl");
-                return Ok(());
+                exit(1);
             }
         }
         
@@ -82,7 +92,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if sum<0{
                 println!("Error: The sum is negative");
                 println!("Because of the risk of owoflows, this is not supported");
-                return Ok(());
+                exit(1);
             }
             //write sum into a
             dict.insert(split_lines[1].to_string(), sum);
@@ -94,7 +104,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if sum<0{
                 println!("Error: The sum is negative");
                 println!("Because of the risk of owoflows, this is not supported");
-                return Ok(());
+                exit(1);
             }
             //write sum into a
             dict.insert(split_lines[1].to_string(), sum);
@@ -106,7 +116,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if sum<0{
                 println!("Error: The sum is negative");
                 println!("Because of the risk of owoflows, this is not supported");
-                return Ok(());
+                exit(1);
             }
             //write sum into a
             dict.insert(split_lines[1].to_string(), sum);
@@ -118,7 +128,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if sum<0{
                 println!("Error: The sum is negative");
                 println!("Because of the risk of owoflows, this is not supported");
-                return Ok(());
+                exit(1);
             }
             //write sum into a
             dict.insert(split_lines[1].to_string(), sum);
@@ -156,6 +166,10 @@ fn get_value(string: String, dict: HashMap<String,i32>) -> i32{
         return string.parse::<i32>().unwrap();
     }
     else{
+        if !dict.contains_key(&string){
+            println!("Error: Variable {} does not exist", string);
+            exit(1);
+        }	
         return dict.get(&string).unwrap().clone();
     }
 }
@@ -167,28 +181,13 @@ fn compare(string: String, dict: HashMap<String,i32>) -> bool{
     let a = get_value(split_lines[0].to_string(), dict.clone());
     let b = get_value(split_lines[2].to_string(), dict.clone());
     if split_lines[1] == ">"{
-        if a>b{
-            return true;
-        }
-        else{
-            return false;
-        }
+        return a>b;
     }
     if split_lines[1] == "<"{
-        if a<b{
-            return true;
-        }
-        else{
-            return false;
-        }
+        return a<b;
     }
     if split_lines[1] == "="{
-        if a==b{
-            return true;
-        }
-        else{
-            return false;
-        }
+        return a==b;
     }
     return false;
 
