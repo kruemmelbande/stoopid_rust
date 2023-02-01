@@ -1,0 +1,4 @@
+var:uwu:1
+print:uwu
+add:uwu:1
+goif:uwu:<:10:1
