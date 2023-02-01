@@ -26,7 +26,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     while i<linecount
     {
         i+=1;
-        let line = lines.get(i-1).unwrap().as_ref().unwrap();
+        let line = lines.get(i-1).unwrap().as_ref().unwrap().trim();
         if line.is_empty(){
             continue;
         }
@@ -51,7 +51,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     while i<linecount
     {
         i+=1;
-        let line = lines.get(i-1).unwrap().as_ref().unwrap();
+        let line = lines.get(i-1).unwrap().as_ref().unwrap().trim();
         if line.is_empty(){
             continue;
         }   
